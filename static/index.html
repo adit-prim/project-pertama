@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Konversi Bilangan Modern</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --green-dark: #14350c;
+        --green-medium: #274e13;
+        --green-light: #b5f6a4;
+        --green-accent: #8cf47d;
+        --gray-bg: #f8fafc;
+        --gray-card: #ffffff;
+        --border-radius: 22px;
+        --shadow: 0 8px 40px rgba(17, 32, 7, 0.08);
+        --font-header: "Montserrat", Arial, sans-serif;
+        --font-body: "Roboto", Arial, sans-serif;
+      }
+      body {
+        background: var(--gray-bg);
+        margin: 0;
+        min-height: 100vh;
+        font-family: var(--font-body);
+      }
+      .navbar {
+        background: var(--green-dark);
+        color: #fff;
+        padding: 18px 0 18px 0;
+        text-align: center;
+        font-family: var(--font-header);
+        font-size: 1.6rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        box-shadow: 0 2px 8px rgba(20, 53, 12, 0.08);
+      }
+      .container {
+        max-width: 420px;
+        margin: 40px auto 0 auto;
+        background: var(--gray-card);
+        border-radius: 30px;
+        box-shadow: var(--shadow);
+        padding: 36px 28px 32px 28px;
+      }
+      .input-card,
+      .output-card {
+        background: #fff;
+        border-radius: var(--border-radius);
+        border: 1.5px solid #e6ebe7;
+        padding: 22px 18px 18px 18px;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.5rem;
+        font-family: var(--font-header);
+      }
+      .input-card select,
+      .output-card select {
+        font-size: 1.1rem;
+        border: none;
+        background: transparent;
+        font-family: var(--font-header);
+        color: var(--green-medium);
+        font-weight: 700;
+        outline: none;
+      }
+      .input-card input {
+        border: none;
+        background: transparent;
+        font-size: 1.6rem;
+        font-family: var(--font-header);
+        font-weight: 700;
+        width: 120px;
+        outline: none;
+        color: var(--green-dark);
+      }
+      .output-card .result-value {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--green-dark);
+        font-family: var(--font-header);
+      }
+      .swap-btn {
+        background: var(--green-light);
+        border: none;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        box-shadow: 0 2px 14px rgba(140, 244, 125, 0.13);
+        margin: 0 auto 22px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .swap-btn:hover {
+        background: var(--green-accent);
+      }
+      .swap-btn svg {
+        width: 28px;
+        height: 28px;
+        fill: #274e13;
+      }
+      .info-bar {
+        background: #edfbe7;
+        border-radius: var(--border-radius);
+        padding: 16px 18px;
+        margin-bottom: 18px;
+        color: #384e2b;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+      }
+      .info-bar img {
+        width: 42px;
+        height: 42px;
+      }
+      .convert-btn {
+        width: 100%;
+        background: var(--green-accent);
+        color: #14350c;
+        border: none;
+        border-radius: 999px;
+        padding: 17px 0;
+        font-size: 1.25rem;
+        font-family: var(--font-header);
+        font-weight: 700;
+        cursor: pointer;
+        margin: 14px 0 0 0;
+        box-shadow: 0 4px 24px rgba(140, 244, 125, 0.16);
+        transition: background 0.15s;
+      }
+      .convert-btn:hover {
+        background: #a9f9a3;
+      }
+      .error-bar {
+        background: #ffeaea;
+        border-radius: var(--border-radius);
+        color: #b01313;
+        padding: 14px 18px;
+        margin: 15px 0 0 0;
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: left;
+      }
+      @media (max-width: 500px) {
+        .container {
+          margin: 0;
+          border-radius: 0;
+          box-shadow: none;
+          padding: 18px 6px 32px 6px;
+        }
+        .navbar {
+          font-size: 1.2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">Konversi Bilangan</div>
+    <div class="container">
+      <form id="convertForm" autocomplete="off">
+        <div class="input-card">
+          <input
+            type="text"
+            id="value"
+            placeholder="Masukkan bilangan"
+            required
+          />
+          <select id="base_from"></select>
+        </div>
+        <button
+          type="button"
+          class="swap-btn"
+          id="swap-btn"
+          title="Tukar basis"
+        >
+          <svg viewBox="0 0 48 48">
+            <path
+              d="M33.5 27a1.5 1.5 0 1 1 0 3H13.12l2.44 2.44a1.5 1.5 0 1 1-2.12 2.12l-5-5a1.5 1.5 0 0 1 0-2.12l5-5a1.5 1.5 0 1 1 2.12 2.12L13.12 27H33.5ZM14.5 21a1.5 1.5 0 0 1 0-3h20.38l-2.44-2.44a1.5 1.5 0 1 1 2.12-2.12l5 5a1.5 1.5 0 0 1 0 2.12l-5 5a1.5 1.5 0 1 1-2.12-2.12L34.88 21H14.5Z"
+            />
+          </svg>
+        </button>
+        <label
+          style="
+            font-size: 1rem;
+            font-family: var(--font-header);
+            margin-bottom: 6px;
+          "
+          >Dikonversi menjadi</label
+        >
+        <div class="output-card">
+          <span class="result-value" id="result-value">0</span>
+          <select id="base_to"></select>
+        </div>
+        <div id="info-bar" class="info-bar" style="display: none">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/942/942748.png"
+            alt="info"
+          />
+          <span id="info-text"></span>
+        </div>
+        <button type="submit" class="convert-btn">Konversi</button>
+        <div id="error-bar" class="error-bar" style="display: none"></div>
+      </form>
+    </div>
+    <script>
+      // Basis bilangan
+      const base_options = [
+        "Biner",
+        "Desimal",
+        "Heksadesimal",
+        "Octal",
+        "BCD",
+        "Excess-3",
+        "Gray Code",
+      ];
+
+      function fillDropdowns() {
+        const fromSel = document.getElementById("base_from");
+        const toSel = document.getElementById("base_to");
+        fromSel.innerHTML = "";
+        toSel.innerHTML = "";
+        for (let base of base_options) {
+          let opt1 = document.createElement("option");
+          opt1.value = base;
+          opt1.text = base;
+          fromSel.add(opt1);
+
+          let opt2 = document.createElement("option");
+          opt2.value = base;
+          opt2.text = base;
+          toSel.add(opt2);
+        }
+        fromSel.value = "Desimal";
+        toSel.value = "Biner";
+      }
+      fillDropdowns();
+
+      // Swap bases
+      document.getElementById("swap-btn").onclick = function () {
+        let fromSel = document.getElementById("base_from");
+        let toSel = document.getElementById("base_to");
+        let temp = fromSel.value;
+        fromSel.value = toSel.value;
+        toSel.value = temp;
+      };
+
+      document.getElementById("convertForm").onsubmit = async function (e) {
+        e.preventDefault();
+        const value = document.getElementById("value").value;
+        const base_from = document.getElementById("base_from").value;
+        const base_to = document.getElementById("base_to").value;
+        const resultField = document.getElementById("result-value");
+        const errorBar = document.getElementById("error-bar");
+        const infoBar = document.getElementById("info-bar");
+        const infoText = document.getElementById("info-text");
+
+        errorBar.style.display = "none";
+        infoBar.style.display = "none";
+        resultField.textContent = "...";
+
+        let res = await fetch("/api/convert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ value, base_from, base_to }),
+        });
+        let data = await res.json();
+
+        if (data.success) {
+          resultField.textContent = data.result;
+          // Info: tampilkan penjelasan konversi
+          infoText.innerHTML = `Konversi <b>${base_from}</b> ke <b>${base_to}</b>.`;
+          infoBar.style.display = "";
+        } else {
+          resultField.textContent = "0";
+          errorBar.textContent = data.error;
+          errorBar.style.display = "";
+        }
+      };
+    </script>
+  </body>
+</html>
